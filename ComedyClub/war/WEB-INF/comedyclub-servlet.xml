@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<!-- =================================================================== -->
+<!-- Application context definition for "TechConf" DispatcherServlet.    -->
+<!-- =================================================================== -->
+<beans>
+    <!-- =================================================================== -->
+    <!-- Controller Definitions                                              -->
+    <!-- =================================================================== -->
+    
+    <bean id="userStartPageController"
+        class="com.comedyClub.web.UserStartPageController">
+<!--         <property name="userManagerService"><ref bean="userManagerService"/></property>  -->
+    </bean>
+
+    <bean id="userSummaryController"
+        class="com.comedyClub.web.UserSummaryController">
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean>
+      
+    <bean id="listUsersController"
+        class="com.comedyClub.web.ListUsersController">
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean>
+    
+    <bean id="addFriendController"
+        class="com.comedyClub.web.AddFriendController">
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean> 
+    
+    <bean id="deleteFriendController"
+        class="com.comedyClub.web.DeleteFriendController">
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean> 
+    
+    <bean id="readUserStoryController"
+        class="com.comedyClub.web.ReadUserStoryController">
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+        <property name="userManagerService"><ref bean="userManagerService"/></property>        
+    </bean>
+
+    <bean id="listUserStoriesController"
+        class="com.comedyClub.web.ListUserStoriesController">
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+        <property name="userManagerService"><ref bean="userManagerService"/></property>        
+        <property name="ratingManagerService"><ref bean="ratingManagerService"/></property>                
+    </bean>
+
+    <bean id="listMyStoriesController"
+        class="com.comedyClub.web.ListMyStoriesController">
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+        <property name="ratingManagerService"><ref bean="ratingManagerService"/></property>                
+    </bean>
+
+    <bean id="deleteStoryController"
+        class="com.comedyClub.web.DeleteStoryController">
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+    </bean>
+
+    <bean id="readMyStoryController"
+        class="com.comedyClub.web.ReadMyStoryController">
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+    </bean>    
+    
+    
+    <!-- =================================================================== -->
+    <!-- Form controllers                                                    -->
+    <!-- =================================================================== -->  
+
+   <!--  Validator and Form Controller for user Login page -->
+    <bean id="userLoginFormValidator" class="com.comedyClub.web.validator.UserLoginFormValidator">
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean>
+    
+    <bean id="userLoginFormController" class="com.comedyClub.web.UserLoginFormController">
+        <property name="sessionForm"><value>true</value></property>
+        <property name="commandName"><value>userToLogin</value></property>
+        <property name="commandClass"><value>com.comedyClub.dto.UserDto</value></property>
+        <property name="validator"><ref bean="userLoginFormValidator"/></property>
+        <property name="formView"><value>userLogin</value></property>
+        <property name="successView"><value>userStartPage.html</value></property>
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean>
+    
+   <!--  Validator and Form Controller for register user page -->
+    <bean id="registerUserFormValidator" class="com.comedyClub.web.validator.RegisterUserFormValidator">
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean>
+    
+    <bean id="registerUserFormController" class="com.comedyClub.web.RegisterUserFormController">
+        <property name="sessionForm"><value>true</value></property>
+        <property name="commandName"><value>userToRegister</value></property>
+        <property name="commandClass"><value>com.comedyClub.dto.UserDto</value></property>
+        <property name="validator"><ref bean="registerUserFormValidator"/></property>
+        <property name="formView"><value>registerUser</value></property>
+        <property name="successView"><value>userStartPage.html</value></property>
+        <property name="userManagerService"><ref bean="userManagerService"/></property>
+    </bean>
+    
+   <!--  Validator and Form Controller for rating user story -->
+    <bean id="rateUserStoryFormValidator" class="com.comedyClub.web.validator.RateUserStoryFormValidator">
+        <property name="ratingManagerService"><ref bean="ratingManagerService"/></property>    
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>            
+        <property name="userManagerService"><ref bean="userManagerService"/></property>                           
+    </bean>
+    
+    <bean id="rateUserStoryFormController" class="com.comedyClub.web.RateUserStoryFormController">
+        <property name="sessionForm"><value>true</value></property>
+        <property name="commandName"><value>rating</value></property>
+        <property name="commandClass"><value>com.comedyClub.dto.RatingDto</value></property>
+        <property name="validator"><ref bean="rateUserStoryFormValidator"/></property>
+        <property name="formView"><value>rateUserStory</value></property>
+        <property name="successView"><value>listUserStories.html</value></property>
+<!--    <property name="userManagerService"><ref bean="userManagerService"/></property>  -->
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+        <property name="ratingManagerService"><ref bean="ratingManagerService"/></property>                
+    </bean>
+    
+   <!--  Validator and Form Controller for adding new story -->
+    <bean id="addStoryFormValidator" class="com.comedyClub.web.validator.AddStoryFormValidator">
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>            
+    </bean>
+    
+    <bean id="addStoryFormController" class="com.comedyClub.web.AddStoryFormController">
+        <property name="sessionForm"><value>true</value></property>
+        <property name="commandName"><value>story</value></property>
+        <property name="commandClass"><value>com.comedyClub.dto.StoryDto</value></property>
+        <property name="validator"><ref bean="addStoryFormValidator"/></property>
+        <property name="formView"><value>addStory</value></property>
+        <property name="successView"><value>listMyStories.html</value></property>
+<!--    <property name="userManagerService"><ref bean="userManagerService"/></property>  -->
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+    </bean>
+    
+   <!--  Validator and Form Controller for editing story -->
+    <bean id="editStoryFormValidator" class="com.comedyClub.web.validator.EditStoryFormValidator">
+    </bean>
+    
+    <bean id="editStoryFormController" class="com.comedyClub.web.EditStoryFormController">
+        <property name="sessionForm"><value>true</value></property>
+        <property name="commandName"><value>story</value></property>
+        <property name="commandClass"><value>com.comedyClub.dto.StoryDto</value></property>
+        <property name="validator"><ref bean="editStoryFormValidator"/></property>
+        <property name="formView"><value>editStory</value></property>
+        <property name="successView"><value>listMyStories.html</value></property>
+<!--    <property name="userManagerService"><ref bean="userManagerService"/></property>  -->
+        <property name="storyManagerService"><ref bean="storyManagerService"/></property>
+    </bean>
+    
+    <!-- =================================================================== -->
+    <!-- URL Mappings                                                        -->
+    <!-- =================================================================== -->    
+    
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/userLogin.html">userLoginFormController</prop>
+                <prop key="/registerUser.html">registerUserFormController</prop>
+                <prop key="/userStartPage.html">userStartPageController</prop>
+                <prop key="/listUsers.html">listUsersController</prop>
+                <prop key="/listUserStories.html">listUserStoriesController</prop>
+                <prop key="/userSummary.html">userSummaryController</prop>
+                <prop key="/addFriend.html">addFriendController</prop>
+                <prop key="/deleteFriend.html">deleteFriendController</prop>
+                <prop key="/readUserStory.html">readUserStoryController</prop>
+                <prop key="/rateUserStory.html">rateUserStoryFormController</prop>
+		<prop key="/listMyStories.html">listMyStoriesController</prop>
+		<prop key="/addStory.html">addStoryFormController</prop>
+		<prop key="/editStory.html">editStoryFormController</prop>
+		<prop key="/deleteStory.html">deleteStoryController</prop>
+		<prop key="/readMyStory.html">readMyStoryController</prop>
+            </props>
+        </property>
+        <property name="interceptors">
+            <list>
+                <bean class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+                    <property name="sessionFactory" ref="sessionFactory"/>
+                    <property name="flushModeName" value="FLUSH_AUTO" />
+                </bean>
+            </list>
+        </property>  
+    </bean> 
+    
+    <!-- =================================================================== -->
+    <!-- View Resolution using Tiles                                         -->
+    <!-- =================================================================== -->      
+    
+<!--    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles-defs.xml</value>
+            </list>
+        </property>
+    </bean> -->
+    
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"><value>org.springframework.web.servlet.view.JstlView</value></property>
+        <property name="prefix"><value>/WEB-INF/jsp/</value></property>
+        <property name="suffix"><value>.jsp</value></property>
+    </bean>
+
+    <!--<bean id="viewResolverInAction" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="prefix"><value>/WEB-INF/jsp/</value></property>-->
+        <!--<property name="suffix"><value>.jsp</value></property>-->
+    <!--</bean>-->
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename"><value>messages</value></property>
+	</bean>
+
+
+</beans>

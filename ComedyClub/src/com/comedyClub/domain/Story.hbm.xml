@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+		"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+		
+<hibernate-mapping package = "com.comedyClub.domain">
+	<class name="Story">
+		<id name="id" column="id" type="long">
+<!-- 		<generator class="identity" />  -->
+			<!-- "native" value select the best generator -->
+			<!-- in this case it is "identity"	-->
+			<!-- so upper and bottom generator tags are identical	-->			
+ 			<generator class="native" />  
+		</id>
+		
+		<property name="title" not-null="true"/>
+		
+<!-- 	<many-to-one class="User" name="User" not-null="true">
+			<column name="userId" />
+		</many-to-one>  -->	
+		<!-- for less code we write column in the many-to-one tag directly -->
+		<many-to-one class="User" name="user" column="userId" not-null="true"/>
+		
+		<property name="content" not-null="true"/>
+		
+		<property name="isPublic" not-null="true"/>
+		
+		<set inverse="true" name="ratings" cascade="all" lazy="false">
+			<key column="storyId" />
+			<one-to-many class="Rating" />
+		</set>		
+		
+	</class>
+</hibernate-mapping>

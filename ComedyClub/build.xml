@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<project name="comedyclub" basedir="." default="usage">
+    <property file="build.properties"/>
+
+    <property name="bin.dir" value="bin"/>
+    <property name="src.dir" value="src"/>
+    <property name="web.dir" value="war"/>
+    <property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+    <property name="hbm.source.dir" value="${src.dir}/com/comedyClub/domain"/>
+    <property name="hbm.dest.dir" value="${build.dir}/com/comedyClub/domain"/>
+    <property name="name" value="comedyclub"/>
+
+    <path id="master-classpath">
+        <fileset dir="${web.dir}/WEB-INF/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${appserver.home}/common/lib">
+            <include name="servlet*.jar"/>
+        </fileset>
+
+        <fileset dir="${appserver.home}/server/lib">
+            <include name="servlet*.jar"/>
+        </fileset>
+
+        <pathelement path="${build.dir}"/>
+    </path>
+
+    <target name="usage">
+        <echo message=""/>
+        <echo message="${name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="clean     --> Deleting deploy and build directory "/>
+        <echo message="build     --> Build the application"/>
+        <echo message="deploy    --> Deploy application as directory"/>
+        <echo message=""/>
+    </target>
+
+    <target name="clean" description="Clean output directories">
+        <delete dir="${build.dir}/com"/>
+        <delete dir="${deploy.path}/${name}"/>
+    </target>
+
+    <target name="build" description="Compile main source tree java files">
+        <mkdir dir="${build.dir}"/>
+        <javac destdir="${build.dir}" target="1.5" debug="true"
+               deprecation="false" optimize="false" failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="master-classpath"/>
+        </javac>
+        <copy todir="${hbm.dest.dir}">
+            <fileset dir="${hbm.source.dir}">
+                <include name="**/*.hbm.xml"/>
+            </fileset>
+        </copy>        
+    </target>
+
+    <target name="deploy" depends="clean, build" description="Deploy application">
+        <mkdir dir="${deploy.path}/${name}"/>
+        <copy todir="${deploy.path}/${name}">
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+    </target>
+
+</project>
+
